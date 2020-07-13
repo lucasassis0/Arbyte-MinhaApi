@@ -1,42 +1,52 @@
 const { Router } = require("express")
 const router = new Router()
+const knex = require("../database")
+const { insert, table } = require("../database")
 
 const routeName = '/products'
+const tableName = 'products'
 
-//Lista todos os produtos
 router.get(routeName, (req, res) => {
-    res.json([{ message: 'Vai retornar todos os produtos' }])
+    knex('products')
+        .then(result => { res.json(result) })
+        .catch(err => console.log(err))
 })
 
-//Pega todos os dados de um produto
 router.get(`${routeName}/:id`, (req, res) => {
-    res.json([{
-        message: 'Vai retornar os dados de um produto dado um id',
-        id: req.params.id,
-    }])
+    knex(tableName)
+    .where({ id: req.params.id })
+    .then(([found]) => res.json(found))
 })
 
-//Insere um produto
 router.post(routeName, (req, res) => {
-    const product = {
-        name: req.body.name,
-        price: req.body.price
+    knex(tableName)
+        .insert(req.body)
+        .then(inserted => res.status(201).json(inserted))
+        .catch(err => console.log(err))
+})
+
+router.patch(`${routeName}/:id`, async (req, res) => {
+    try {
+        const [found] = await knex(tableName).where({ id: req.params.id })
+        if (!found) {
+            const err = Error("Not Found")
+            err.status = 404
+            throw err
+        }
+        const updated = await knex(tableName)
+            .where({ id: req.params.id })
+            .update(req.body)
+        res.json(updated)
+    } catch (err) {
+        res.status(err.status || 500).json({ message: err.message })
     }
-    res.status(201).json({
-        message: 'Insere um produto',
-        insertedProduct: product
-    })
 })
 
-//Edita os dados de um produto
-router.patch(`${routeName}/:id`, (req, res) => {
-    res.json([{ 
-        message: 'Atualiza produto',
-        id: req.params.id,
-    }])
+router.delete(`${routeName}/:id`, (req, res) => {
+    knex(tableName)
+        .where({ id: req.params.id })
+        .del()
+        .then(() => res.status(204).end())
 })
-
-//Deleta os dados de um produto
-router.delete(`${routeName}/:id`, (req, res) => res.status(204).end())
 
 module.exports = router
