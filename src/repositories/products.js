@@ -1,3 +1,5 @@
+//Camada responsável pela interação com o banco de dados
+
 const knex = require("../../database")
 const moment = require("moment")
 const tableName = "products"

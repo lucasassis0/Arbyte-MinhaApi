@@ -1,11 +1,8 @@
 const { Router } = require("express")
 const router = new Router()
-const knex = require("../../database")
-const { insert, table } = require("../../database")
 const controller = require("../controllers/products")
 
 const routeName = '/products'
-const tableName = 'products'
 
 router.get(routeName, controller.getAll)
 

@@ -7,24 +7,15 @@ const routeName = '/orders'
 router.get(routeName, controller.getAll)
 
 //Pega todos os dados de um pedidos
-router.get(`${routeName}/:id`, (req, res) => {
-    res.json([{
-        message: 'Vai retornar os dados de um pedido dado um id',
-        id: req.params.id,
-    }])
-})
+router.get(`${routeName}/:id`, controller.getById)
 
+//Cria um novo pedido
 router.post(routeName, controller.create)
 
 //Edita os dados de um pedido
-router.patch(`${routeName}/:id`, (req, res) => {
-    res.json([{
-        message: 'Atualiza pedido',
-        id: req.params.id,
-    }])
-})
+router.patch(`${routeName}/:id`, controller.update)
 
 //Deleta os dados de um pedido
-router.delete(`${routeName}/:id`, (req, res) => res.status(204).end())
+router.delete(`${routeName}/:id`, controller.del)
 
 module.exports = router

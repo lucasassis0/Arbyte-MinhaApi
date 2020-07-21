@@ -11,6 +11,13 @@ const getAll = async (req, res) => {
     }
 }
 
+const getById = (req, res) => {
+    service
+        .getById(req.params.id)
+        .then(order => res.json(order))
+        .catch(error => handleError(res, error))
+}
+
 const create = async (req, res) => {
     try {
         if (!req.body.product_id || !req.body.quantity) {
@@ -23,7 +30,26 @@ const create = async (req, res) => {
     }
 }
 
+const update = async (req, res) => {
+    try {
+        const updated = await service.update(req.params.id, req.body)
+        res.json(updated)
+    } catch (error) {
+        handleError(res, error)
+    }
+}
+
+const del = (req, res) => {
+    service
+        .del(req.params.id)
+        .then(() => res.status(204).end())
+        .catch(error => handleError(res, error))
+}
+
 module.exports = {
     getAll,
-    create
+    getById,
+    create,
+    update,
+    del
 }

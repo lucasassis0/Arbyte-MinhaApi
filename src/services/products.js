@@ -1,3 +1,5 @@
+//Camada reponsável pelas regras de negócio
+
 const repository = require("../repositories/products")
 
 const getAll = () => repository.getAll()

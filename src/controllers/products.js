@@ -1,3 +1,5 @@
+//Camada responsável pelas entradas e saídas da API
+
 const service = require("../services/products")
 const Product = require("../models/Product")
 const handleError = require("./handleError")
