@@ -1,15 +1,24 @@
 const knex = require("../../database")
+const Order = require("../models/Order")
 const tableName = "orders"
 
-const getAll = () => knex(tableName)
+const getAll = async () => {
+    const orders = await knex(tableName)
+    return orders.map((order) => new Order(order))
+}
 
-const create = (order) => {
-    return knex(tableName)
-        .insert(order)
-        .then(([inserted]) => inserted)
+const getById = async (id) => {
+    const [order] = await knex(tableName).where({ id: id })
+    return new Order(order)
+}
+
+const create = async order => {
+    const [id] = await knex(tableName).insert(order)
+    return id
 }
 
 module.exports = {
     getAll,
+    getById,
     create
 }

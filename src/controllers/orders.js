@@ -13,11 +13,10 @@ const getAll = async (req, res) => {
 
 const create = async (req, res) => {
     try {
-        const order = new Order(req.body)
-        if (!order.product_id || !order.quantity || !order.value) {
+        if (!req.body.product_id || !req.body.quantity) {
             throw { status: 400, message: "Invalid data" }
         }
-        const created = await service.create(order)
+        const created = await service.create(req.body)
         res.status(201).json(created)
     } catch (error) {
         handleError(res, error)

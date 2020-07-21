@@ -5,12 +5,13 @@ const getAll = () => repository.getAll()
 const getById = async (id) => {
     const product = await repository.getById(id)
     if (!product) {
-        throw {status: 404, message: "Not found"}
+        throw { status: 404, message: "Not found" }
     }
     return product
 }
 
 const create = async (product) => {
+    product.id = undefined
     const id = await repository.create(product)
     const created = await repository.getById(id)
     return created
