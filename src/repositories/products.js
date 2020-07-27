@@ -22,13 +22,14 @@ const getById = (id) => {
  */
 const create = (product) => {
     return knex(tableName)
+        .returning('id')
         .insert(product)
         .then(([inserted]) => inserted)
 }
 
 const update = (id, product) => {
     product.updated_at = moment().utc().format()
-    return knex(tableName).where({id: id}).update(product)
+    return knex(tableName).where({ id: id }).update(product)
 }
 
 /**
